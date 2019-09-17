@@ -17,6 +17,14 @@ public class RunScript : MonoBehaviour
     public ConsoleScript ConsoleLog;
     //bool inputSet = false;
     public int numCon;
+    public bool interruptF = false;
+    public int numCBeforeIntrrupt = 0;
+    public int calcBeforeIntrrupt = 0;
+    public Button InputButton;
+    public Button InterruptEnterB;
+    public Button InterruptStepB;
+    public Button RunB;
+    public Button OneStepB;
 
 
     //public InputField mailbox;
@@ -38,6 +46,10 @@ public class RunScript : MonoBehaviour
 
             mailboxes[i].GetComponentInParent<InputField>().text = "000";
         }
+
+        InputButton.gameObject.SetActive(false);
+        InterruptEnterB.gameObject.SetActive(false);
+        InterruptStepB.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -49,35 +61,24 @@ public class RunScript : MonoBehaviour
 
     public void runB(int numC)
     {
-        foreach (GameObject intxt in mailboxes)
-        {
-            if (intxt.GetComponentInParent<InputField>().text.Length == 1)
-            {
-                intxt.GetComponentInParent<InputField>().text = "00" + intxt.GetComponentInParent<InputField>().text;
-            }
-            else if (intxt.GetComponentInParent<InputField>().text.Length == 2)
-            {
-                intxt.GetComponentInParent<InputField>().text = "0" + intxt.GetComponentInParent<InputField>().text;
-            }
-        }
-
-
+        refillInputField();
         bool isIndexZero = false;
-
-
         stop = false;
 
         while (isIndexZero == false)
         {
+            if(interruptF == true)
+            {
+                numC = numCBeforeIntrrupt;
+                Calculator.calculatorn.text = calcBeforeIntrrupt.ToString();
+                interruptF = false;
+            }
             string mB = mailboxes[numC].GetComponent<Text>().text;
             numC++;
             Counter.counter = numC;
-
             
-
             switch (mB.Substring(0, 1))
             {
-
                 case "0":
                     if (mB.Substring(1, 2) == "00") {
                         isIndexZero = true;
@@ -137,10 +138,8 @@ public class RunScript : MonoBehaviour
                 case "9":
                     if (mB.Substring(2) == "1")
                     {
+                        InputButton.gameObject.SetActive(true);
                         isIndexZero = true;
-
-                        //Calculator.calculatorn.text = GameObject.Find("InputFieldIn").GetComponent<InputField>().text;
-                        //ConsoleLog.consoleLog("Number read from the input and copied to calculator display.");
                     }
                     else if (mB.Substring(2) == "2")
                     {
@@ -148,50 +147,48 @@ public class RunScript : MonoBehaviour
                         GameObject.Find("Output").GetComponentsInChildren<Text>()[1].text = GameObject.Find("Output").GetComponentsInChildren<Text>()[1].text + "\n" + Calculator.calculatorn.text;
                     }
                     break;
-
             }
             if (stop == true)
             {
                 isIndexZero = true;
             }
-            //System.Threading.Thread.Sleep(1000);
         }
 
     }
 
-    public void stepB(int numC)
+    public void inputBtnPressed()
     {
-        foreach (GameObject intxt in mailboxes)
-        {
-            if (intxt.GetComponentInParent<InputField>().text.Length == 1)
-            {
-                intxt.GetComponentInParent<InputField>().text = "00" + intxt.GetComponentInParent<InputField>().text;
-            }
-            else if (intxt.GetComponentInParent<InputField>().text.Length == 2)
-            {
-                intxt.GetComponentInParent<InputField>().text = "0" + intxt.GetComponentInParent<InputField>().text;
-            }
-        }
-        bool isInterrupt = false;
-        if (isInterrupt == true)
-        {
-            
-        }
+        Calculator.calculatorn.text = GameObject.Find("TextInput").GetComponent<Text>().text;
+        InputButton.gameObject.SetActive(false);
+        runB(Counter.counter);
+    }
 
+    public void interruptBtn()
+    {
+        int pCounter = Int32.Parse(GameObject.Find("TextIFInterrupt").GetComponent<Text>().text);
+        ConsoleLog.consoleLog("Begin of the interrupt handler in mailbox " + pCounter.ToString() + ".");
+        InterruptEnterB.gameObject.SetActive(false);
+        Counter.counter = pCounter;
+        interrupt(pCounter);
+        InterruptStepB.gameObject.SetActive(true);
+    }
+
+    public void interruptBtnStep()
+    {
+        interrupt(Counter.counter);
+    }
+
+    public void interrupt(int numC)
+    {
+        refillInputField();
         stop = false;
-
         numC = Counter.counter;
-
-        
         string mB = mailboxes[numC].GetComponent<Text>().text;
         numC++;
         Counter.counter = numC;
 
-        
-
         switch (mB.Substring(0, 1))
         {
-
             case "0":
                 break;
             case "1":
@@ -248,11 +245,122 @@ public class RunScript : MonoBehaviour
             case "9":
                 if (mB.Substring(2) == "1")
                 {
+                    Calculator.calculatorn.text = GameObject.Find("TextInput").GetComponent<Text>().text;
+                    ConsoleLog.consoleLog("Number read from the input and copied to calculator display.");
+                }
+                else if (mB.Substring(2) == "2")
+                {
+                    ConsoleLog.consoleLog("Calculator value copied to the output.");
+                    GameObject.Find("Output").GetComponentsInChildren<Text>()[1].text = GameObject.Find("Output").GetComponentsInChildren<Text>()[1].text + "\n" + Calculator.calculatorn.text;
+                }
+                else if (mB == "999")
+                {
+                    ConsoleLog.consoleLog("End of the interrupt handler.");
+                    RunB.gameObject.SetActive(true);
+                    OneStepB.gameObject.SetActive(true);
+                    InterruptEnterB.gameObject.SetActive(true);
+                    InterruptEnterB.gameObject.SetActive(false);
+                    InterruptStepB.gameObject.SetActive(false);
+                    GameObject.Find("InterruptToggle").GetComponent<Toggle>().isOn = false;
+                    Calculator.calculatorn.text = calcBeforeIntrrupt.ToString();
+                    Counter.counter = numCBeforeIntrrupt;
+                }
+                break;
+        }
+       
+    }
 
-                    //inputReady(numC);
 
-                    //Calculator.calculatorn.text = GameObject.Find("InputFieldIn").GetComponent<InputField>().text;
-                    //ConsoleLog.consoleLog("Number read from the input and copied to calculator display.");
+    public void stepB(int numC)
+    {
+        refillInputField();
+        stop = false;
+        numC = Counter.counter;
+        if (interruptF == true)
+        {
+            numC = numCBeforeIntrrupt;
+            Calculator.calculatorn.text = calcBeforeIntrrupt.ToString();
+            interruptF = false;
+        }
+
+        if (GameObject.Find("InterruptToggle").GetComponent<Toggle>().isOn == true)
+        {
+            interruptF = true;
+            numCBeforeIntrrupt = numC;
+            calcBeforeIntrrupt = Int32.Parse(Calculator.calculatorn.text);
+            InterruptEnterB.gameObject.SetActive(true);//gameObject.SetActive(true);
+            RunB.gameObject.SetActive(false);
+            OneStepB.gameObject.SetActive(false);
+            Counter.counter = 0;
+            Calculator.calculatorn.text = "000";
+            ConsoleLog.consoleLog("Interrupt handler activated.");
+            return;
+        }
+
+        string mB = mailboxes[numC].GetComponent<Text>().text;
+        numC++;
+        Counter.counter = numC;
+
+        switch (mB.Substring(0, 1))
+        {
+            case "0":
+                break;
+            case "1":
+                ConsoleLog.consoleLog("Added the contents of mailbox " + mB.Substring(1, 2) + " to the calculator display.");
+                numberC = Int32.Parse(Calculator.calculatorn.text) + Int32.Parse(mailboxes[Int32.Parse(mB.Substring(1, 2))].GetComponent<Text>().text);
+                Calculator.calculatorn.text = numberC.ToString();
+                break;
+            case "2":
+                ConsoleLog.consoleLog("Subtracted the contents of mailbox " + mB.Substring(1, 2) + " from the calculator display.");
+                numberC = Int32.Parse(Calculator.calculatorn.text) - Int32.Parse(mailboxes[Int32.Parse(mB.Substring(1, 2))].GetComponent<Text>().text);
+                Calculator.calculatorn.text = numberC.ToString();
+                break;
+            case "3":
+                ConsoleLog.consoleLog("Stored the calculator value into the mailbox " + mB.Substring(1, 2) + " .");
+                mailboxes[Int32.Parse(mB.Substring(1, 2))].GetComponentInParent<InputField>().text = Calculator.calculatorn.text;
+                break;
+            case "4":
+                ConsoleLog.consoleLog("Stored the address portion of the calculator value into the address portion of the instruction in mailbox " + mB.Substring(1, 2) + " .");
+                mailboxes[Int32.Parse(mB.Substring(1, 2))].GetComponentInParent<InputField>().text = mailboxes[Int32.Parse(mB.Substring(1, 2))].GetComponentInParent<InputField>().text.Substring(0, 1) + Calculator.calculatorn.text.Substring(1, 2);
+                break;
+            case "5":
+                ConsoleLog.consoleLog("Loaded the contents of mailbox " + mB.Substring(1, 2) + " into the calculator.");
+                Calculator.calculatorn.text = mailboxes[Int32.Parse(mB.Substring(1, 2))].GetComponent<Text>().text;
+                break;
+            case "6":
+                ConsoleLog.consoleLog("Branched to mailbox " + mB.Substring(1, 2) + ".");
+                numC = Int32.Parse(mB.Substring(1, 2));
+                Counter.counter = numC;
+                break;
+            case "7":
+                if (Int32.Parse(Calculator.calculatorn.text) == 0)
+                {
+                    ConsoleLog.consoleLog("Calculator value is zero, therefore branched to mailbox " + mB.Substring(1, 2) + " .");
+                    numC = Int32.Parse(mB.Substring(1, 2));
+                    Counter.counter = numC;
+                }
+                else
+                {
+                    ConsoleLog.consoleLog("Calculator value is not zero, therefore not branched.");
+                }
+                break;
+            case "8":
+                if (Int32.Parse(Calculator.calculatorn.text) >= 0)
+                {
+                    ConsoleLog.consoleLog("Calculator value is positive, therefore branched to mailbox " + mB.Substring(1, 2) + " .");
+                    numC = Int32.Parse(mB.Substring(1, 2));
+                    Counter.counter = numC;
+                }
+                else
+                {
+                    ConsoleLog.consoleLog("Calculator value is not positive, therefore not branched.");
+                }
+                break;
+            case "9":
+                if (mB.Substring(2) == "1")
+                {
+                    Calculator.calculatorn.text = GameObject.Find("TextInput").GetComponent<Text>().text;
+                    ConsoleLog.consoleLog("Number read from the input and copied to calculator display.");
                 }
                 else if (mB.Substring(2) == "2")
                 {
@@ -260,18 +368,11 @@ public class RunScript : MonoBehaviour
                     GameObject.Find("Output").GetComponentsInChildren<Text>()[1].text = GameObject.Find("Output").GetComponentsInChildren<Text>()[1].text + "\n" + Calculator.calculatorn.text;
                 }
                 break;
-
         }
-
-            //System.Threading.Thread.Sleep(1000);
-    }
-
-    public void interrupt()
-    {
+        
 
     }
-
-    
+  
 
     public void ResetBtnPressed()
     {
@@ -290,17 +391,19 @@ public class RunScript : MonoBehaviour
         GameObject.Find("ConsoleInfo").GetComponent<Text>().text = newLine + "\n" + GameObject.Find("ConsoleInfo").GetComponent<Text>().text;
     }
 
-    /*
-    public void inputReady(int numC)
+    public void refillInputField()
     {
-        numCon = numC;
-    }
-    */
-
-    public void inputBtnPressed()
-    {
-        Calculator.calculatorn.text = GameObject.Find("TextInput").GetComponent<Text>().text;
-        runB(Counter.counter);
+        foreach (GameObject intxt in mailboxes)
+        {
+            if (intxt.GetComponentInParent<InputField>().text.Length == 1)
+            {
+                intxt.GetComponentInParent<InputField>().text = "00" + intxt.GetComponentInParent<InputField>().text;
+            }
+            else if (intxt.GetComponentInParent<InputField>().text.Length == 2)
+            {
+                intxt.GetComponentInParent<InputField>().text = "0" + intxt.GetComponentInParent<InputField>().text;
+            }
+        }
     }
 }
 /*
