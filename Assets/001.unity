@@ -10231,7 +10231,7 @@ GameObject:
   - component: {fileID: 437411204}
   - component: {fileID: 437411203}
   m_Layer: 5
-  m_Name: Text
+  m_Name: TextInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12417,7 +12417,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 581106893}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 867085418}
+        m_MethodName: stepB
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &581106893
@@ -17524,6 +17535,7 @@ GameObject:
   - component: {fileID: 780447369}
   - component: {fileID: 780447368}
   - component: {fileID: 780447367}
+  - component: {fileID: 780447370}
   m_Layer: 5
   m_Name: InputFieldIn
   m_TagString: Untagged
@@ -17604,7 +17616,18 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 780447370}
+        m_MethodName: inputRefill
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.InputField+SubmitEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_OnValueChanged:
@@ -17657,6 +17680,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 780447365}
   m_CullTransparentMesh: 0
+--- !u!114 &780447370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 780447365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb16c8077ffe8734e99ef5427b8b97a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intxt: {fileID: 437411203}
 --- !u!1 &786637328
 GameObject:
   m_ObjectHideFlags: 0
@@ -20033,7 +20069,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 867085418}
         m_MethodName: runB
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -20099,6 +20135,8 @@ MonoBehaviour:
   Calculator: {fileID: 1165027648}
   isInputBtnPressed: 0
   Counter: {fileID: 1599547685}
+  ConsoleLog: {fileID: 1285626857}
+  numCon: 0
 --- !u!1 &874689656
 GameObject:
   m_ObjectHideFlags: 0
@@ -30531,11 +30569,11 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 12
-    m_FontStyle: 0
+    m_FontSize: 8
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
-    m_MaxSize: 40
+    m_MaxSize: 181
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -30563,7 +30601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d50a48b0a98f3524993dd2249a2856fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  consoleLog: {fileID: 0}
+  consoleLogText: {fileID: 1285626855}
 --- !u!1 &1286849490
 GameObject:
   m_ObjectHideFlags: 0
@@ -48911,7 +48949,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 867085418}
-        m_MethodName: InBtnPressed
+        m_MethodName: inputBtnPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
