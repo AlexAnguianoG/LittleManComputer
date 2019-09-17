@@ -46,7 +46,10 @@ public class RunScript : MonoBehaviour
 
     void Update()
     {
-       
+        if (Input.GetKey("escape"))
+        {
+            Application.Quit();
+        }
     }
 
     public void runB(int numC)

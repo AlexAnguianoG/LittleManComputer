@@ -62,9 +62,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\ConsoleScript.cs" />
     <Compile Include="Assets\Scripts\calculator.cs" />
+    <Compile Include="Assets\Scripts\ConsoleScript.cs" />
     <Compile Include="Assets\Scripts\contador.cs" />
+    <Compile Include="Assets\Scripts\ExitScript.cs" />
     <Compile Include="Assets\Scripts\RunScript.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/alex1/Documents/LMC/LMC/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
