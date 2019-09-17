@@ -10,7 +10,13 @@ public class RunScript : MonoBehaviour
     public Button runButton;
     public int numberC;
     public calculator Calculator;
-    public InputField mailbox;
+    public bool isInputBtnPressed = false;
+    //public Text CounterText;
+    public contador Counter;
+    bool stop = false;
+
+
+    //public InputField mailbox;
     List<GameObject> mailboxes = new List<GameObject>();
 
     // Start is called before the first frame update
@@ -26,6 +32,8 @@ public class RunScript : MonoBehaviour
             {
                 mailboxes.Add(GameObject.Find("Text" + i.ToString()));
             }
+
+            mailboxes[i].GetComponentInParent<InputField>().text = "000";
         }
     }
 
@@ -45,12 +53,15 @@ public class RunScript : MonoBehaviour
         Debug.Log(mailboxes[n].GetComponent<Text>().text);*/
 
         bool isIndexZero = false;
-        do
-        {
-            int numC = 0;
-            string mB = mailboxes[numC].GetComponent<Text>().text;
+        
+        int numC = 0;
+        stop = false;
 
-            /*switch (mailbox.text.Substring(0, 1))*/
+        while (isIndexZero == false)
+        {
+            string mB = mailboxes[numC].GetComponent<Text>().text;
+            numC++;
+            Counter.counter = numC;
 
             switch (mB.Substring(0, 1))
             {
@@ -60,42 +71,101 @@ public class RunScript : MonoBehaviour
                 case "1":
                     numberC = Int32.Parse(Calculator.calculatorn.text) + Int32.Parse(mailboxes[Int32.Parse(mB.Substring(1, 2))].GetComponent<Text>().text);
                     Calculator.calculatorn.text = numberC.ToString();
-                    isIndexZero = false;
                     break;
                 case "2":
                     numberC = Int32.Parse(Calculator.calculatorn.text) - Int32.Parse(mailboxes[Int32.Parse(mB.Substring(1, 2))].GetComponent<Text>().text);
                     Calculator.calculatorn.text = numberC.ToString();
-                    isIndexZero = false;
                     break;
                 case "3":
-                    
-                    /*GameObject.Find("Text10").GetComponent<Text>().text = "10";*/
-                    /*p.text = "10";*/
-
-                    /*mailboxes[Int32.Parse(mB.Substring(1,2))].GetComponent<Text>().text = Calculator.calculatorn.text;*/
-                    /*mailboxes[10].GetComponent<Text>().text = "89";
-                    Debug.Log(mailboxes[10].GetComponent<Text>().text);*/
-                  /*  Text prueba = mailboxes[Int32.Parse(mB.Substring(1, 2))].GetComponentInChildren<Text>();
-                    prueba.text = "42";*/
-
-                    mailboxes[Int32.Parse(mB.Substring(1,2))].GetComponent<Text>().text = Calculator.calculatorn.text.Substring(1,2);
-                    isIndexZero = false;
+                    mailboxes[Int32.Parse(mB.Substring(1, 2))].GetComponentInParent<InputField>().text = Calculator.calculatorn.text;
                     break;
                 case "4":
                     break;
-                case "5": 
-                    Calculator.calculatorn.text = mailbox.text.Substring(1, 2);
-                    isIndexZero = false;
+                case "5":
+                    Calculator.calculatorn.text = mailboxes[Int32.Parse(mB.Substring(1, 2))].GetComponent<Text>().text;
+                    break;
+                case "6":
+                    numC = Int32.Parse(mB.Substring(1, 2));
+                    Counter.counter = numC;
+                    break;
+                case "7":
+                    if (Int32.Parse(Calculator.calculatorn.text) == 0)
+                    {
+                        numC = Int32.Parse(mB.Substring(1, 2));
+                        Counter.counter = numC;
+                    }
+                    break;
+                case "8":
+                    if (Int32.Parse(Calculator.calculatorn.text) >= 0)
+                    {
+                        numC = Int32.Parse(mB.Substring(1, 2));
+                        Counter.counter = numC;
+                    }
+                    break;
+                case "9":
+                    if (mB.Substring(2) == "1")
+                    {
+                        StartCoroutine("WaitForAction");
+                        Calculator.calculatorn.text = GameObject.Find("InputFieldIn").GetComponent<InputField>().text;
+                    }
+                    else if(mB.Substring(2) == "2")
+                    {
+                        GameObject.Find("Output").GetComponentsInChildren<Text>()[1].text = GameObject.Find("Output").GetComponentsInChildren<Text>()[1].text + "\n" + Calculator.calculatorn.text;
 
+                    }
                     break;
 
-
             }
-
-            numC++;
-
-
-        } while (isIndexZero == false);
-
+            if (stop == true)
+            {
+                isIndexZero = true;
+            }
+        }
     }
+
+    public void InBtnPressed() {
+        isInputBtnPressed = true;
+    }
+
+    public IEnumerable WaitForAction()
+    {
+        isInputBtnPressed = false; // clear last action, we want a new one
+        while (isInputBtnPressed != true) { yield return null; }
+    }
+
+    public void ResetBtnPressed()
+    {
+        Counter.counter = 0;
+    }
+
+    public void StopBtnPressed()
+    {
+        stop = true;
+        Calculator.calculatorn.text = "000";
+        Counter.counter = 0;
+    }
+
+
 }
+/*
+    Consola
+    Input
+    Interrupt
+
+
+    ZIP:
+    -Ejecutable de unity
+    -Scripts
+    -Manual
+    -README.txt
+
+    Paso a paso
+
+
+    poner automaticamente 000 en mailboxes y calculatortext
+
+
+
+
+
+*/

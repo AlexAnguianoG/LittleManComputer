@@ -11,8 +11,8 @@ public class contador : MonoBehaviour
 
     public int counter;
     public Text textCounter;
-    public Text mailbox;
-    public Button runButton;
+    //public Text mailbox;
+    //public Button runButton;
 
 
     // Start is called before the first frame update
