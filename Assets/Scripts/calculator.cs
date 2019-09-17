@@ -41,10 +41,5 @@ public class calculator : MonoBehaviour
         {
 
         }
-
-
     }
-
-    
-
 }

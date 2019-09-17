@@ -11,22 +11,15 @@ public class contador : MonoBehaviour
 
     public int counter;
     public Text textCounter;
-    //public Text mailbox;
-    //public Button runButton;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         textCounter = GetComponent<Text>();
         counter = 00;
-        
     }
 
-    // Update is called once per frame
     void Update()
     {
-
         if (counter < 10)
         {
             textCounter.text = "0" + counter.ToString();
@@ -35,9 +28,5 @@ public class contador : MonoBehaviour
         {
             textCounter.text = counter.ToString();
         }
-
-        
     }
-
-    
 }

@@ -6,31 +6,24 @@ using UnityEngine.UI;
 
 public class RunScript : MonoBehaviour
 {
-
-    public Button runButton;
-    public int numberC;
     public calculator Calculator;
-    public bool isInputBtnPressed = false;
-    //public Text CounterText;
     public contador Counter;
-    bool stop = false;
     public ConsoleScript ConsoleLog;
-    //bool inputSet = false;
-    public int numCon;
-    public bool interruptF = false;
-    public int numCBeforeIntrrupt = 0;
-    public int calcBeforeIntrrupt = 0;
+    List<GameObject> mailboxes = new List<GameObject>();
+    public Button runButton;
     public Button InputButton;
     public Button InterruptEnterB;
     public Button InterruptStepB;
     public Button RunB;
     public Button OneStepB;
+    bool stop = false;
+    public bool isInputBtnPressed = false;
+    public bool interruptF = false;
+    public int numberC;
+    public int numCon;
+    public int numCBeforeIntrrupt = 0;
+    public int calcBeforeIntrrupt = 0;
 
-
-    //public InputField mailbox;
-    List<GameObject> mailboxes = new List<GameObject>();
-
-    // Start is called before the first frame update
     void Start()
     {
         for (int i = 0; i <= 99; i++)
@@ -43,7 +36,6 @@ public class RunScript : MonoBehaviour
             {
                 mailboxes.Add(GameObject.Find("Text" + i.ToString()));
             }
-
             mailboxes[i].GetComponentInParent<InputField>().text = "000";
         }
 
@@ -52,11 +44,9 @@ public class RunScript : MonoBehaviour
         InterruptStepB.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
        
-
     }
 
     public void runB(int numC)
@@ -369,8 +359,6 @@ public class RunScript : MonoBehaviour
                 }
                 break;
         }
-        
-
     }
   
 
@@ -406,19 +394,4 @@ public class RunScript : MonoBehaviour
         }
     }
 }
-/*
-    Interrupt
 
-
-    ZIP:
-    -Ejecutable de unity*
-    -Scripts*
-    -Manual*
-    -README.txt*
-
-    Paso a paso
-
-
-    poner automaticamente 000 en mailboxes y calculatortext
-
-*/
