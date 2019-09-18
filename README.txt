@@ -7,7 +7,7 @@ Scripts content:
 	+Contador: Script in charge of the display of the counter.
 	+ConsoleScript: Script responsible for printing the instructions that are being executed in the program. 
 	+Calculator: Script responsible for handling the flags and display of the blender.
-	+ExitScript+: Script responsible for exitting the application. 
+	+ExitScript: Script responsible for exitting application. 
 
 This application was made in the 2019.2.3f1 version of Unity, was designed for Windows
 by its creators Alejandro Anguiano and Yessica Hernández, 
