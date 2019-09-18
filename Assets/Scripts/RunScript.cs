@@ -12,6 +12,8 @@ public class RunScript : MonoBehaviour
     List<GameObject> mailboxes = new List<GameObject>();
     public Button runButton;
     public Button InputButton;
+    public Button InputInterruptButton;
+    public Button InputStepButton;
     public Button InterruptEnterB;
     public Button InterruptStepB;
     public Button RunB;
@@ -42,6 +44,7 @@ public class RunScript : MonoBehaviour
         InputButton.gameObject.SetActive(false);
         InterruptEnterB.gameObject.SetActive(false);
         InterruptStepB.gameObject.SetActive(false);
+        InputStepButton.gameObject.SetActive(false);
     }
 
     void Update()
@@ -156,6 +159,24 @@ public class RunScript : MonoBehaviour
         runB(Counter.counter);
     }
 
+    public void inputInterruptBtnPressed()
+    {
+        Calculator.calculatorn.text = GameObject.Find("TextInput").GetComponent<Text>().text;
+        ConsoleLog.consoleLog("Number read from the input and copied to calculator display.");
+        InputInterruptButton.gameObject.SetActive(false);
+        OneStepB.gameObject.SetActive(true);
+    }
+
+    public void inputStepBtnPressed()
+    {
+        Calculator.calculatorn.text = GameObject.Find("TextInput").GetComponent<Text>().text;
+        ConsoleLog.consoleLog("Number read from the input and copied to calculator display.");
+        InputStepButton.gameObject.SetActive(false);
+        OneStepB.gameObject.SetActive(true);
+        InterruptStepB.gameObject.SetActive(true);
+    }
+
+
     public void interruptBtn()
     {
         int pCounter = Int32.Parse(GameObject.Find("TextIFInterrupt").GetComponent<Text>().text);
@@ -169,6 +190,7 @@ public class RunScript : MonoBehaviour
     public void interruptBtnStep()
     {
         interrupt(Counter.counter);
+        InterruptStepB.gameObject.SetActive(true);
     }
 
     public void interrupt(int numC)
@@ -238,8 +260,11 @@ public class RunScript : MonoBehaviour
             case "9":
                 if (mB.Substring(2) == "1")
                 {
-                    Calculator.calculatorn.text = GameObject.Find("TextInput").GetComponent<Text>().text;
-                    ConsoleLog.consoleLog("Number read from the input and copied to calculator display.");
+                    
+                    InputInterruptButton.gameObject.SetActive(true);
+                    InputButton.gameObject.SetActive(false);
+                    InterruptEnterB.gameObject.SetActive(false);
+                    InterruptStepB.gameObject.SetActive(false);
                 }
                 else if (mB.Substring(2) == "2")
                 {
@@ -352,8 +377,9 @@ public class RunScript : MonoBehaviour
             case "9":
                 if (mB.Substring(2) == "1")
                 {
-                    Calculator.calculatorn.text = GameObject.Find("TextInput").GetComponent<Text>().text;
-                    ConsoleLog.consoleLog("Number read from the input and copied to calculator display.");
+                    InputStepButton.gameObject.SetActive(true);
+                    OneStepB.gameObject.SetActive(false);
+                    RunB.gameObject.SetActive(false);
                 }
                 else if (mB.Substring(2) == "2")
                 {
@@ -375,6 +401,14 @@ public class RunScript : MonoBehaviour
         stop = true;
         Calculator.calculatorn.text = "000";
         Counter.counter = 0;
+        OneStepB.gameObject.SetActive(true);
+        RunB.gameObject.SetActive(true);
+        InputButton.gameObject.SetActive(false);
+        InterruptEnterB.gameObject.SetActive(false);
+        InterruptStepB.gameObject.SetActive(false);
+        InputStepButton.gameObject.SetActive(false);
+        GameObject.Find("Output").GetComponentsInChildren<Text>()[1].text = "";
+        ConsoleLog.consoleLogText.text = "";
     }
 
     public void printConsole(string newLine)
